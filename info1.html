@@ -1,0 +1,314 @@
+<div id="info1Div">
+    <div class="optionDiv">
+        <select>
+            <option></option>
+        </select>
+        <button class="btn btn-success btn-sm addBtn">新增</button>
+        <button class="btn btn-success btn-sm batchDleBtn">批量删除</button>
+    </div>
+    <table class="table table-bordered text-center">
+        <tr>
+            <td>编号</td>
+            <td>文章标题</td>
+            <td>所属栏目</td>
+            <td>排列方式</td>
+            <td>作者</td>
+            <td>发布时间</td>
+            <td>阅读次数</td>
+            <td>操作</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" name="checkbox"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><i class="iconfont icon-xiugai" title="修改"></i>
+                <i class="iconfont icon-lajitong" title="删除"></i>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="modal" id="infoModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <div class="backDiv">
+                    <i class="glyphicon glyphicon-menu-left"></i>
+                    <span>返回</span>
+                </div>
+                <div class="modal-title">添加栏目</div>
+            </div>
+           
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>标题</label>
+                    <input type="text" name="infoName" class="form-control infoTitle">
+                </div>
+                 <div class="form-group">
+                    <label>所属栏目</label>
+                   <select name="infoParent" class="form-control infoCategoryId">
+                            <option value="">请选择</option>
+                        </select>
+                </div>
+                <div class="form-group">
+                    <label>选择样式</label>
+                    <div class="radio">
+                        <label for="style-one">
+                            <input type="radio" name="styleList" id="style-one" value="style-one">
+                            <img src="images/122.jpg"style="width: 240px; height:100px;">
+                        </label>
+                          <label for="style-two">
+                            <input type="radio" name="styleList" id="style-two" value="style-two">
+                            <img src="images/123.jpg"style="width: 240px; height:100px;">
+                        </label>
+                       <!--  <label for="style-one">style-one</label>
+                        <input type="radio" name="styleList" value="style-one" id="style-one">
+                        <img src="" alt="style-one">
+                         <label for="style-two">style-two</label>
+                        <input type="radio" name="styleList" value="style-two" id="style-two">
+                        <img src="" alt="style-two"> -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>正文</label>
+                    <textarea cols="30",rows="6" class="form-control infoText"></textarea>
+                </div>
+                 <div class="form-group">
+                        <button type="reset" class="hidden"></button>
+                    </div>
+            </div>
+            
+            <div class="modal-footer">
+                 <span class="msg"></span>
+                <button class="btn btn-success btn-sm saveBtn">保存</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //$("#infoModal").show();
+    $(function(){
+    var currentCid="";
+    var atricles="";
+    var option="";
+    var article="";
+    $("#infoModal .modal-content").height($(window).height());
+    //选项框加载栏目
+    addoption();
+    function addoption(){
+     $.get(baseUrl+"/manager/category/findAllCategory",{},function(res){
+        res.data.forEach(function(item,index){
+            var $newopt=$('<option value='+item.id+'>'+item.name+'</option>');
+            $(".optionDiv select").append($newopt);
+        });
+        currentCid=res.data[0].id;
+        loadDate(currentCid);
+     })
+    }
+    function loadDate(cid){
+        //清空表格
+        $("#info1Div table tr:not(:first)").empty();
+        var obj={
+            page:0,
+            pageSize:1000,
+            categoryId:cid
+        };
+        $.get(baseUrl+"/manager/article/findArticle",obj,function(res){
+            console.log(res);
+            if(res.status=="200"){
+                atricles=res.data.list;
+               res.data.list.forEach(function(item,index){
+                $newtr=$(`<tr>
+            <td><input type="checkbox" name="checkbox" value=`+item.id+`></td>
+            <td>`+item.title+`</td>
+            <td>`+item.category.name+`</td>
+            <td>`+item.liststyle+`</td>
+            <td>`+(item.author?item.author:"---")+`</td>
+            <td>`+(item.publishtime?item.publishtime:"---")+`</td>
+            <td>`+(item.readtimes?item.readtimes:"0")+`</td>
+            <td><i class="iconfont icon-xiugai" title="修改"></i>
+                <i class="iconfont icon-lajitong" title="删除"></i>
+            </td>
+        </tr>`);
+            $("#info1Div table").append($newtr);
+               });
+            }else{
+                alert(res.status+res.message);
+            }
+        })
+    }
+    $(".optionDiv select").change(function(){
+        var id=$(this).val();
+        loadDate(id);
+        currentCid=id;
+    });
+
+    //加载栏目对应的文章
+    //点击新增按钮
+    $("#info1Div .addBtn").click(function(){
+        option="新增";
+        $(".msg").html="";
+        $("button[type=reset]").trigger('click');
+        $("#infoModal").show();
+    }) 
+    $(".backDiv").click(function(){
+        $("#infoModal").hide();
+    })
+    addoption2();
+    function addoption2(){
+     $.get(baseUrl+"/manager/category/findAllCategory",{},function(res){
+             console.log(res);
+            res.data.forEach(function(item,index){
+            $newopt=$('<option value='+item.id+'>'+item.name+'</option>');
+            console.log($newopt);
+        $(".infoCategoryId").append($newopt);
+        });
+        $("infoCategoryId").val(currentCid);
+     })
+    }
+    //点击修改
+    $("#info1Div").on({
+        click:function(){
+            option="修改";
+            $(".msg").html("");
+            addoption2();
+
+            var id=$(this).closest('tr').find('input[type=checkbox]').val();
+            var art= atricles.filter(function(item,index){
+                return item.id==id;
+            })[0];
+            article=art;
+             $("#infoModal input[type=text]").val(art.title);
+             $("#infoModal select").val(art.category.id);
+             $('input[name=infoList]').attr('chenckbox',false);
+             $('input[value='+art.liststyle+']').attr('checked',true);
+             $("#infoModal textarea").val(art.content);
+            $("#infoModal").show();
+        }
+    },'[title=修改]')
+  
+   
+    //点击保存
+    $("#infoModal .saveBtn").click(function(){
+        var title=$("#infoModal input[type=text]").val();
+        var categoryid=$("#infoModal select").val();
+        var style=$("input[name=styleList]:checked").val();
+        var content=$("#infoModal textarea").val();
+        if(title&&categoryid&&style){
+           if(style=="style-one"||style=="style-two"){
+            var obj={
+                title:title,
+                liststyle:style,
+                categoryId:categoryid,
+                content:content
+            }
+            if(option=="修改"){
+                obj.id=article.id;
+                obj.readtimes=article.readtimes;
+                obj.publishtime=parseTime();
+            }
+            console.log(obj);
+            $.post(baseUrl+"/manager/article/saveOrUpdateArticle",obj,function(res){
+                console.log(res)
+                if(res.status=="200"){
+                    loadDate(currentCid);
+                    $("#infoModal").hide();
+                }else{
+                    alert(res.status+res.message)
+                }
+            })
+           }
+        }else{
+            $(".msg").html("请检查输入");
+        }
+    });
+    function parseTime(){
+        var date=new Date();
+        var year=date.getFullYear();
+       var month=getMonth(date.getMonth());
+       var day=date.getDate();
+       var hour=date.getHours();
+       var minutes=date.getMinutes();
+       var seconds=date.getSeconds();
+       return year+"-"+month+"-"+day+" "+hour+":"+minutes+":"+seconds;
+    }
+    function getMonth(num){
+        return num<10?'0'+num:num;
+    }
+      //点击删除
+    $("#info1Div").on({
+        click:function(){
+            var id=$(this).closest('tr').find('input[type=checkbox]').val();
+            console.log(id);
+            $.get(baseUrl+"/manager/article/deleteArticleById",{id:id},function(res){
+                if(res.status=="200"){
+                    loadDate(currentCid);
+                }else{
+                    alert(res.status+res.message);
+                }
+            })
+        }
+    },'[title=删除]');
+     //点击批量删除
+    $(".batchDleBtn").click(function(){
+       var ids= $("#info1Div table input[type=checkbox]:checked").map(function(index,item){
+            return item.value;
+        }).get();
+       var obj={
+        ids:ids.toString(),
+       };
+       console.log(obj);
+       $.post(baseUrl+"/manager/article/batchDeleteArticle",obj,function(res){
+           console.log(res);
+           if(res.status=="200"){
+             loadDate(currentCid);
+         }else{
+            alert(res.status+rse.message);
+         }
+          
+       })
+    })
+    //$("#infoModal").show();
+    });
+</script>
+<style type="text/css">
+    #info1Div{
+        background: white;
+        padding: 10px;
+    }
+    #info1Div table{
+        margin-top: 10px;
+    }
+    .optionDiv select{
+        width: 300px;
+         height:30px;
+    }
+      #info1Div tr i{
+        color:red;
+    }
+    #info1Div tr i:last-child{
+        color:green;
+    }
+    #infoModal{
+        background: rgba(0,0,0,0.4)
+    }
+    .modal-dialog{
+       margin-top:0px;
+       margin-right: 0px;
+       width: 600px;
+    }
+   #infoModal .backDiv{
+        float: left;
+
+    }
+    #infoModal .modal-footer{
+        float: right;
+    }
+    .msg{
+        color: red;
+    }
+</style>

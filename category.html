@@ -1,0 +1,244 @@
+<div id="categroy">
+    <button class="btn btn-success btn-sm addBtn">新增</button>
+    <button class="btn btn-success btn-sm batchDleBtn">批量删除</button>
+    <table class="table table-bordered text-center">
+        <tr>
+            <td>编号</td>
+            <td>栏目名称</td>
+            <td>父栏目</td>
+            <td>描述</td>
+            <td>操作</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" name="checkbox"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><i class="iconfont icon-xiugai" title="修改"></i>
+                <i class="iconfont icon-lajitong" title="删除"></i>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="modal" id="categroyModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <div class="backDiv">
+                    <i class="glyphicon glyphicon-menu-left"></i>
+                    <span>返回</span>
+                </div>
+                <div class="modal-title">添加栏目</div>
+            </div>
+            <div class="modal-body">
+                <form class="form">
+                    <div class="form-group">
+                        <label>栏目名称</label>
+                        <input type="text" name="categroyName" class="from-control">
+                    </div>
+                      <div class="form-group">
+                        <label>父栏目</label>
+                        <select name="categroyParent" class="form-control">
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                      <div class="form-group">
+                        <label>描述</label>
+                       <textarea name="categroyComment" cols="30" rows="5" class="from-control"></textarea>
+                    </div>
+                      <div class="form-group">
+                        <button type="reset" class="hidden"></button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <span class="msg"></span>
+                <button class="btn btn-success btn-sm saveBtn">保存</button>
+            </div>
+        </div>
+    </di    v>
+</div>
+<style type="text/css">
+    #categroy{
+        padding: 10px;
+        background-color: white;
+        border-radius: 5px;
+    }
+    #categroy table{
+        margin-top: 20px;
+    }
+    #categroy tr i{
+        color:red;
+    }
+    #categroy tr i:last-child{
+        color:green;
+    }
+    #categroyModal{
+        background: rgba(0,0,0,0.4)
+    }
+    .modal-dialog{
+       margin-top:0px;
+       margin-right: 0px;
+       width: 300px;
+    }
+   #categroyModal .backDiv{
+        float: left;
+
+    }
+    #categroyModal .modal-footer{
+        float: right;
+    }
+    .msg{
+        color: red;
+    }
+</style>
+<script type="text/javascript">
+    // $("#categroyModal").show();
+    $(function(){
+    $("#categroyModal .modal-content").height($(window).height());
+    var categroys;
+    // var option="";
+    var currentId;
+    // 1.loeadDate  加载信息
+    loeadDate()
+    function loeadDate(){
+        $.get(baseUrl+"/manager/category/findAllCategory",{},function(res){
+            console.log(res)
+            categroys=res.data;
+            $("#categroy table tr:not(:first)").remove();
+            res.data.forEach(function(item,index){
+                 var $newtr=$(`<tr>
+            <td><input type="checkbox" name="checkbox" value='`+item.id+`'></td>
+            <td>`+item.name+`</td>
+            <td>`+(item.parent?item.parent.name:"..")+`</td>
+            <td>`+item.comment+`</td>
+            <td><i class="iconfont icon-xiugai" title="修改"></i>
+                <i class="iconfont icon-lajitong" title="删除"></i>
+            </td>
+        </tr>>`);
+                
+         $("#categroy table").append($newtr);
+            });
+           
+        })
+    }
+
+    //2.添加信息
+    $(".addBtn").click(function(){
+        //显示模态框 模拟reset点击 msg修改提示框
+        //加载select
+        addOption();
+        $(".msg").html("");
+        $("button[type=reset]").trigger("click");
+        $("#categroyModal").show();
+    })
+      currentId="";
+    $(".backDiv").click(function(){
+        $("#categroyModal").hide();
+    })
+    function addOption(handle){
+         $.get(baseUrl+"/manager/category/findAllCategory",{},function(res){
+            console.log(res)
+            $("select[name=categroyParent] option:not(:first)").remove();
+           res.data.forEach(function(item,index){
+              $newOption=$(`<option value='`+item.id+`'>`+item.name+`</option>`);
+            $("select[name=categroyParent]").append($newOption);
+           });
+           if(handle){
+            handle();
+           }
+           
+        })
+    }
+    $("#categroyModal .saveBtn").click(function(){
+        //添加栏目 获取表单的值  请求保存刷新页面
+        var name=$("input[name=categroyName]").val();
+        var comment=$("textarea[name=categroyComment]").val();
+        var parentId=$("select[name=categroyParent]").val();
+        if(name&&comment){
+            console.log(name,comment)
+            var obj={
+                name:name,
+                comment:comment,
+                parentId:parentId,
+                no:null
+            }
+            if(currentId){
+                obj['id']=currentId;
+            }
+            $.post(baseUrl+"/manager/category/saveOrUpdateCategory",obj,function(res){
+                console.log(res);
+                if(res.status="201"){
+                $("#categroyModal").hide();
+                loeadDate();
+            }else{
+                $("msg").html("创建失败！");
+            }
+            })
+        }else{
+           $(".msg").html("请检查输入");
+        }
+
+    })
+    //3.删除栏目
+$("#categroy").on({
+    click:function(){
+    var id=$(this).parent().parent().find('[type=checkbox]').val();
+    console.log(id);
+    var obj={
+        id:id
+    }
+    $.get(baseUrl+"/manager/category/deleteCategoryById",obj,function(res){
+        console.log(res);
+        if (res.status="200"){
+            loeadDate();
+        }else{
+            alert(res.status+" "+res.message);
+        }
+    })
+    }
+},"[title='删除']")
+    //4.修改栏目
+$("#categroy").on({
+        //打开模态框  修改提示 加载select 写数据
+        click:function(){
+        
+         currentId=$(this).parent().parent().find('[type=checkbox]').val();
+        // console.log(id);
+         
+        //  console.log(data);
+        
+        addOption(function(){
+            var data=categroys.filter(function(item,index){
+            return item.id==currentId; 
+        })[0];
+            $("input[name=categroyName]").val(data.name);
+            $("select[name=categroyParent]").val(data.parent?data.parent.id:" ");
+            $("textarea[name=categroyComment]").val(data.comment);
+        });
+        $(".msg").html("");
+        $("#categroyModal").show();
+    }
+    },'[title="修改"]')
+    //5.批量删除
+    $(".batchDleBtn").click(function(){
+       var ids= $("input[type=checkbox]:checked").map(function(inde,item){
+            return $(item).val();
+        }).get();
+       console.log(ids);
+       var obj={
+        ids:ids.toString(),
+         }
+       $.post(baseUrl+"/manager/category/batchDeleteCategory",obj,function(res){
+        if(res.status=="200"){
+         console.log("删除成功");
+         loeadDate();
+           
+        }else{
+            alert(res.status+res.message);
+        }
+        console.log(res);
+       })
+    })
+    })
+</script>

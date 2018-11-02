@@ -1,0 +1,384 @@
+<div id="homeDiv">
+	<div class="row">
+		<div class="col-sm-3 leftChart">
+			<!-- 左边的三个DIV -->
+			<div>
+				<div class='iconDiv bg-green' >
+					<i class="iconfont  icon-icon-"></i>
+				</div>
+				<div class="numDiv">
+					<span>99.9%</span><br>
+					<small>SERVER UPTIME</small>
+				</div>
+			</div>
+			<div>
+				<div class='iconDiv bg-purple'>
+					<i class="iconfont icon-xiugaitouxiang"></i>
+				</div>
+				<div class="numDiv">
+					<span>117K</span><br>
+					<small>USER TOTAL</small>
+				</div>
+			</div>
+			<div>
+				<div class='iconDiv bg-blue'>
+					<i class="iconfont icon-05"></i>
+				</div>
+				<div class="numDiv">
+					<span>2,470</span><br>
+					<small>NEW DELLY PHOTOS</small>
+				</div>
+			</div>
+			
+		</div>
+		<!-- 中间的图标 -->
+		<div class="col-sm-6 centerChart">
+			<div class="title">
+				<span>14.58%</span><br>
+				<small>MORE VISTORS</small>
+			</div>
+			<!-- 直线图 图标容器 -->
+			<div id="lineChart"></div>
+		</div>
+		<div class="col-sm-3 rightChart">
+			<div class="colChart">
+				<div class="title">
+					<span>95.8%</span><br>
+					<small>CURRENT SERVER UPTIME</small>
+				</div>
+				<!-- 柱状图 图表容器 -->
+				<div id="colChart"></div>
+			</div>
+			<div class="pieChart">
+				<div class="title">
+					<span>320,45</span><br>
+					<small>AVG OF</small>
+				</div>
+				<!-- 饼状图 图表容器 -->
+				<div id="pieChart"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<style type="text/css">
+	#homeDiv{
+		width: 98%;
+		margin: 10px auto;
+		font-family: "微软雅黑"；
+	}
+	.bg-white{
+		background-color: white;
+	}
+	.bg-blue{
+		background-color: #005eca;
+	}
+	.bg-green{
+		background-color: #66ba10;
+	}
+	.bg-purple{
+		background-color: #7c31bf;
+	}
+
+	.leftChart>div{
+		height: 100px;
+		background-color: white;
+		margin-bottom: 15px;
+		padding:20px;
+	}
+	.iconDiv{
+		width: 60px;
+		height: 60px;
+		border-radius: 50%;
+		float: left;
+		text-align:center;
+	}
+	.iconDiv i{
+		font-size:40px;
+		color:white;
+		line-height: 48px;
+	}
+	.numDiv{
+		float: left;
+		margin-left: 10px;
+	}
+	#homeDiv small{
+		font-size: 14px;
+		font-weight: 900;
+	}
+	#homeDiv span{
+		font-size:22px;
+		font-weight: 900;
+	}
+	.centerChart{
+		background-color: white;
+		height: 330px;
+		position: relative;
+
+	}
+	.centerChart .title{
+		position: absolute;
+		left:20px;
+		top:20px;
+		z-index: 1000;
+	}
+	.centerChart span{
+		color:green;
+		font-size:28;
+	}
+	.rightChart>div{
+		background-color: white;
+		height: 155px;
+		margin-bottom: 20px;
+		position: relative;
+	}
+	.rightChart .title{
+		position: absolute;
+		left: 10px;
+		top:10px;
+		z-index: 1000;
+	}
+	.rightChart .title span:first{
+		color:#7d30c0;
+	}
+	.pieChart .title span{
+		color:green;
+	}
+	#pieChart,#colChart{
+		height: 100%;
+	}
+	.centerChart{
+		overflow: hidden;
+	}
+	#lineChart{
+		height: 100%;
+		width:110%;
+		position: absolute;
+		left: -60px;
+	}
+</style>
+<script type="text/javascript">
+	$(function(){
+		pieChart();
+		colChart();
+		centerChart();
+
+		// 初始化 饼状图表
+		function pieChart(){ 
+			//第一个参数 绑定的容器（id),容器的宽高为图表的宽高，第二个参数 配置{}
+  			var  piechart = Highcharts.chart('pieChart', {
+  				//图标设置
+				chart: {
+					plotBackgroundColor: null,
+					plotBorderWidth: null,
+					plotShadow: false,
+
+				},
+				//数据项 颜色集合
+				colors:['#5c9c49','#5c9c49','#83c570','#367921','#2c6915','#9cdc87','#b4f8a5','#b6f6a3','#6aaa55'],
+				//版权声明
+				credits:{
+					enabled:false,
+				},
+				//标题  subtitle子标题
+				title: {
+					text: null
+				},
+				//数据提示框
+				tooltip: {
+			        //显示内容
+					headerFormat: '{series.name}<br>',
+					pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+				},
+				//数据项设置
+				plotOptions: {
+					//饼状图 数据项设置
+					pie: {
+						//圆心相对图表位置
+						center:['80%','50%'],
+						//是否允许被选中
+						allowPointSelect: true,
+						cursor: 'pointer',
+						//数据标签
+						dataLabels: {
+							//标签与连接线宽度 =0 没有连接线
+							connectorWidth: 0,
+							//是否启用
+							enabled: false,
+							//数据标签 内容格式
+							format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+							//样式
+							style: {
+								color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+							}
+						},
+						states: {
+							hover: {
+								enabled: false
+							}  
+						},
+						slicedOffset: 20,         // 突出间距
+						point: {                  // 每个扇区是数据点对象，所以事件应该写在 point 下面
+							events: {
+								// 鼠标滑过是，突出当前扇区
+								mouseOver: function() {
+									this.slice();
+								},
+								// 鼠标移出时，收回突出显示
+								mouseOut: function() {
+									this.slice();
+								},
+								// 默认是点击突出，这里屏蔽掉
+								click: function() {
+									return false;
+								}
+							}
+						}
+					}
+				},
+				//数据列设置
+				series: [{
+					//尺寸
+					size: '100%',
+					//圆环的内圆尺寸
+					innerSize: '50%',
+					//类型
+					type: 'pie',
+					name: '浏览器访问量占比',
+					//数据
+					data: [
+						['Firefox',   45.0],
+						['IE',       26.8],
+						{
+							name: 'Chrome',
+							y: 12.8,
+							//sliced: true, // 突出显示这个点（扇区），用于强调。
+						},
+						['Safari',    8.5],
+						['Opera',     6.2],
+						['其他',   0.7]
+					]
+				}]
+			});
+
+		};
+
+		function colChart(){
+			var colchart = Highcharts.chart('colChart',{
+				//图表设置
+				chart: {
+					//类型
+					type: 'column',
+					//下内边距，可调整图表的位置，饼状图表无效果（调整圆心）
+					spacingBottom:0
+				},
+				credits:{
+					enabled:false,
+				},
+				//图例
+				legend:{
+					enabled:false,	
+				},
+				title: {
+					text:null
+				},
+				xAxis: {
+					visible:false
+				},
+				yAxis: {
+					visible:false
+				},
+				//数据提示框
+				tooltip: {
+					// head + 每个 point + footer 拼接成完整的 table
+					headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+					pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+					'<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+					footerFormat: '</table>',
+					shared: true,
+					useHTML: true
+				},
+				//数据列配置
+				plotOptions: {
+					column: {
+						borderWidth: 0,
+						//内一向项（多个数据为一组）间距
+						groupPadding:0.05
+					}
+				},
+				series: [{
+					//这一项的颜色
+					color:'#7c31bf',
+					name: '东京',
+					data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+				}]
+			});
+
+		}
+		function centerChart(){
+			var chart = Highcharts.chart('lineChart', {
+				chart:{
+					//底内内边距
+					spacingBottom:-10,
+				},
+				credits:{
+					enabled:false,
+				},
+				title: {
+					text: null
+				},
+				xAxis:{
+					gridLineWidth:1
+				},
+				yAxis: {
+				},
+				legend: {
+					layout: 'vertical',
+					align: 'right',
+					verticalAlign: 'middle',
+					//例图浮动
+					floating:true,
+					//偏移位置
+					x:-20,
+					y:20,
+				},
+				plotOptions: {
+					series: {
+						label: {
+							connectorAllowed: false
+						},
+						//x轴起始点
+						pointStart: 2010
+					}
+				},
+				series: [{
+					color:'#6fae2e',
+					name: 'Pageviews',
+					data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+				}, {
+					color:'#eeeeee',
+					name: 'Visitor',
+					data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+				}],
+				responsive: {
+					rules: [{
+						condition: {
+							maxWidth: 500
+						},
+						chartOptions: {
+							legend: {
+								layout: 'horizontal',
+								align: 'center',
+								verticalAlign: 'bottom'
+							}
+						}
+					}]
+				}
+			});
+		}
+
+
+
+
+
+	})
+</script>

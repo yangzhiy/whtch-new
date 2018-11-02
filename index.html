@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrapSwitch/css/bootstrap3/bootstrap-switch.min.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="font/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_866602_c5g39z5gxwp.css">
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/highcharts.js"></script>
+    <script type="text/javascript" src="js/echarts.js"></script>
+    <script type="text/javascript" src="css/bootstrapSwitch/js/bootstrap-switch.min.js"></script>
+    <script type="text/javascript" src="css/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        $(function(){
+           $(".leftDiv").height($(window).height());
+           $(".rightDiv").height($(window).height());
+           $(".contentRight").height($(window).height()-50-20);
+           $(".contentLeft ul #ss").trigger("click");
+        });
+
+    </script>
+</head>
+<body>
+    <div>
+    <div class="leftDiv">
+        <div class="topLeft">
+            <img src="images/logo.png" width="40" height="40" style="margin: 0 20px">看点资讯
+        </div>
+        <div class="contentLeft">
+            <ul class="list-unstyle">
+                <li id="ss"><i class=" iconfont icon-shouye"></i><span>首页</span><i class="iconfont icon-webicon213"></i></li>
+                <li id="ww"><i class="iconfont icon-nav"></i><span>栏目管理</span><i class="iconfont icon-webicon213"></i></li>
+                <li id="vv"><i class="iconfont icon-zixun1"></i><span>资讯管理</span><i class="iconfont icon-webicon213"></i></li>
+                <li><i class="iconfont icon-yonghu"></i><span>用户</span><i class="iconfont icon-webicon213"></i></li>
+            </ul>
+        </div>
+    </div>
+    <div class="rightDiv">
+        <div class="topRight">
+            <div class="noticeDiv">
+                <i class="iconfont icon-liebiao"></i>
+                <div class="notice">
+                    <i class="iconfont icon-laba"></i>
+                    <div class="noticeNumb">4</div>
+                </div>
+            </div>
+            <div class="infoDiv">
+                <img src="images/logo.png" width="40px" height="40px" style="border-radius: 50%">
+                <span>lyr</span>
+                <i class="iconfont icon-webicon213"></i>
+            </div>
+        </div>
+        <div class="contentRight"></div>
+    </div>
+    </div>
+</body>
+</html>

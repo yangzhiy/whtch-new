@@ -1,0 +1,203 @@
+<div id="user">
+    <button class="btn btn-success btn-sm addbtn">新增</button>
+    <div class="row marginTop">
+       <div class="col-sm-4 ">
+       <div class="thumbnail">
+       <img src="images/logo.png" alt="" style="width: 150px;height: 150px" class="img-circle">
+       <div class="caption row">
+         <div class="col-sm-4 col-sm-offset-1">姓名:</div>
+         <div class="col-sm-7">张三</div>
+          <div class="col-sm-4 col-sm-offset-1">真实姓名:</div>
+         <div class="col-sm-7">李四</div>
+           <div class="col-sm-4 col-sm-offset-1">手机号:</div>
+         <div class="col-sm-7">123</div>
+           <div class="col-sm-4 col-sm-offset-1">email:</div>
+         <div class="col-sm-7">1549162423@qq.com</div>
+           <div class="col-sm-4 col-sm-offset-1">状态:</div>
+         <div class="col-sm-7">
+           <div class="switch switch-mini" id="uu">
+               <input type="checkbox" checked >
+           </div>
+         </div>
+       </div>
+    </div>
+   </div>
+  </div>
+</div>
+<div class="modal" id="userModal" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="backDiv">
+                    <i class="glyphicon glyphicon-menu-left"></i>
+                        <span>返回</span>
+                    
+                </div>
+                <div class="madal-title text-center">添加用户</div>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="">用户名</label>
+                        <input type="text" name="username" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">密码</label>
+                        <input type="password" name="password" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">重复密码</label>
+                        <input type="password" name="password1" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">真实姓名</label>
+                        <input type="text" name="nickname" class="form-control">
+                    </div>
+                     <div class="form-group">
+                        <label for="">邮箱</label>
+                        <input type="email" name="email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="reset" name="" class="hide">
+                    </div>
+                </form>
+            </div>
+              <div class="modal-footer">
+                 <span class="msg"></span>
+                <button class="btn btn-success btn-sm saveBtn">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+#user{
+    width: 98%;
+    margin: 0 auto;
+}
+    .marginTop{
+      margin-top:20px;
+    }
+    .caption{
+        font-size: 20px;
+        line-height: 40px;
+    }
+    #uerModal .backDiv{
+        float: left;
+        cursor: pointer;
+    }
+    #userModal{
+        background-color: rgba(0,0,0,0.4);
+    }
+    #userModal .modal-dialog{
+        margin-top: 0px;
+        margin-right: 0px;
+        width: 350px;
+    }
+    .msg{
+        color: red;
+        margin-right: 10px;
+    }
+    .saveBtn{
+        float: right;
+    }
+    .thumbnail{
+        box-shadow: 3px 3px 3px #ccc;
+    }
+</style>
+<script type="text/javascript">
+  $("#user").on({
+        'switchChange.bootstrapSwitch':function(event,state){
+           console.log(state);
+            var id=$(this).closest(".switch").prev().attr('userID');
+            var obj={
+                id:id,
+                state:state,
+            }
+            console.log(id);
+            $.post(baseUrl+"/manager/user/changeStatus",obj,function(res){
+                console.log(res);
+            })
+        }
+        },"[type=checkbox]");
+
+    $("#userModal .modal-content").height($(window).height());
+    
+    $(".addbtn").on({
+        click:function(){
+        $("#userModal").show();
+        $("#userModal input[type=reset]").trigger("click");
+        $(".msg").html("");
+        }
+    });
+    $(".backDiv").click(function(){
+        $("#userModal").hide();
+    })
+    $(".saveBtn").on({
+        click:function(){
+            var msg="";
+            var username=$("input[name=username]").val();
+            var password=$("input[name=password]").val();
+            var password1=$("input[name=password1]").val();
+            var nickname=$("input[name=nickname]").val();
+            var email=$("input[name=email]").val();
+            console.log(username,password1,password,nickname,email)
+            if(username&&password&&password1&&nickname&&email){
+                    if(password==password1){
+                       var obj={
+                        username:username,
+                        password:password,
+                        password1:password1,
+                        nickname:nickname,
+                        email:email,
+                       }
+                       $.post(baseUrl+"/manager/user/saveOrUpdateUser",obj,function(res){
+                        console.log(res);
+                        $("#userModal").hide();
+                        loadData();
+                       })
+                    }else{
+                        msg="密码不一致";
+                    }
+            }else{
+                msg="请检查输入的内容";
+            }
+            $(".msg").html(msg);
+        }
+    });
+    loadData()
+    function loadData(){
+          $.get(baseUrl+"/manager/user/findAllUser",{},function(res){
+            console.log(res);
+            $(".marginTop").empty();
+            res.data.forEach(function(item,index){
+                var newtd=$(` 
+    <div class="col-sm-4 ">
+       <div class="thumbnail">
+       <img src="`+(item.userface?item.userface:"http://img.zcool.cn/community/0112d15b0e6022a8012043d8c46a11.gif")+`" alt="" style="width: 150px;height: 150px" class="img-circle">
+       <div class="caption row">
+         <div class="col-sm-4 col-sm-offset-1">姓名:</div>
+         <div class="col-sm-7">`+(item.username?item.username:"-")+`</div>
+          <div class="col-sm-4 col-sm-offset-1">真实姓名:</div>
+         <div class="col-sm-7">`+(item.nickname?item.nickname:"-")+`</div>
+           <div class="col-sm-4 col-sm-offset-1">注册时间:</div>
+         <div class="col-sm-7">`+(item.regTime?item.regTime:"-")+`</div>
+           <div class="col-sm-4 col-sm-offset-1">email:</div>
+         <div class="col-sm-7">`+(item.email?item.email:"-")+`</div>
+           <div class="col-sm-4 col-sm-offset-1">状态:</div>
+         <div class="col-sm-7">
+         <div userID="`+item.id+`" style="display:none"></div>
+           <div class="switch switch-mini">
+               <input type="checkbox" checked />
+           </div>
+         </div>
+       </div>
+    </div>`);
+     $(".marginTop").append(newtd)
+      $("#user input[type=checkbox]:last").bootstrapSwitch("state",item.enabled);
+            });
+            
+
+          });
+    }
+//     $(".switch input[type='checkbox']").bootstrapSwitch("state",true);
+ </script>

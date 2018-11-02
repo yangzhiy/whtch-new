@@ -1,0 +1,145 @@
+<div id="home1Div">
+    <div class="row">
+        <div class="col-sm-3 leftChart" >
+            <div>
+                <div class="inconDiv gb-green">
+                    <i class="iconfont icon-icon-"></i>
+                </div>
+                <div class="numDiv">
+                    <span>99.9%</span><br>
+                    <small>SERVER UPTIME</small>
+                </div>
+            </div>
+            <div>
+                <div class="inconDiv gb-purple">
+                    <i class="iconfont icon-xiugaitouxiang"></i>
+                </div>
+                <div class="numDiv">
+                    <span>117K</span><br>
+                    <small>USER TOTLA</small>
+                </div>
+             </div>
+             <div>
+                <div class="inconDiv gb-blue">
+                    <i class="iconfont icon-05"></i>
+                </div>
+                <div class="numDiv">
+                    <span>2,470</span><br>
+                    <small>NEW DELLY PHOTOS</small>
+                </div>
+             </div>
+        </div>
+        <div class="col-sm-6 centerChart" >
+            <div class="title">
+                <span>14.85%</span><br>
+                <small>MORE VISTORS</small>
+            </div>
+            <div id="lineChart"></div>
+        </div>
+        <div class="col-sm-3 rightChart" >
+            <div class="colChart">
+                <div class="title">
+                    <span>95.8%</span><br>
+                    <small>CURRENT SERVER UPTIME</small>
+                </div>
+                <div id="colChart"></div>
+            </div>
+            <div class="pieChart">
+                <div class="title">
+                    <span>320,45</span><br>
+                    <small>AVG OLF SALEF</small>
+                </div>
+                <div id="pieChart"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    #home1Div{
+        width: 98%;
+        margin: 10px auto;
+        font-family: "微软雅黑";
+    }
+    .gb-white{
+        background-color: white;
+    }
+    .gb-blue{
+        background-color: #005eca;
+    }
+    .gb-green{
+        background-color: #66ba10;
+    }
+    .gb-purple{
+        background-color: #38baec;
+    }
+    .leftChart>div{
+        height: 100px;
+        background-color: white;
+        margin-bottom: 15px;
+        padding: 20px;
+    }
+    .inconDiv{
+        width: 60px;
+        height:60px;
+        border-radius: 50%;
+        float: left;
+        text-align: center;
+    }
+    .inconDiv i{
+        font-size: 30px;
+        color: white;
+        line-height: 50px;
+    }
+    .numDiv{
+        float: left;
+        margin-left: 10px;
+    }
+    #home1Div small{
+       font-size: 14px;
+       font-weight: 800;
+    }
+    #home1Div span{
+        font-size: 22px;
+        font-weight: 800;
+    }
+    .centerChart{
+        background-color: white;
+        height:330px;
+        position: relative;
+    }
+    .cneterChart .title{
+     position: absolute;
+     left: 20px;
+     top: 20px;
+     z-index: 1000;
+    }
+    .centerChart span{
+        color:#66ba10;
+        font-size: 28px;
+    }
+    .rightChart>div{
+        background-color: white;
+        height: 155px;
+        margin-bottom: 20px;
+        position: relative;
+    }
+    .rightChart .title{
+      position: absolute;
+      left: 10px;
+      top:10px;
+    }
+   .colChart .title span{
+    color:  #7b31be;
+   }
+   .pieChart .title span{
+    color: #65ba10 ;
+   }
+</style>
+<script type="text/javascript">
+    $(function(){
+        pieChart();
+        function pieChart(){
+            
+        }
+    })
+</script>

@@ -1,0 +1,203 @@
+<div id="info">
+    <button class="btn btn-success btn-sm addbtn">新增</button>
+    <button class="btn btn-success btn-sm dellbtn">批量删除</button>
+</div>
+    <div class="row e" >
+    
+        <div class="col-md-1 a">编号</div>
+        <div class="col-md-2 a">栏目名称</div>
+        <div class="col-md-2 a">父栏目</div>
+        <div class="col-md-6 a">描述</div>
+        <div class="col-md-1 a">操作</div>
+    </div>
+   <div class="wai" >
+   <!--  <div class="row d">
+         <div class="col-md-1 b">
+        <input type="checkbox" name="checkbox">
+        </div>
+        <div class="col-md-2 b"></div>
+        <div class="col-md-2 b"></div>
+        <div class="col-md-6 b"></div>
+        <div class="col-md-1 b">
+            <i class="iconfont icon-duigouxiao"></i>
+            <i class="iconfont icon-lajitong"></i>
+        </div>
+    </div>
+     <div class="row d">
+        <div class="col-md-1 b">
+        <input type="checkbox" name="checkbox">
+        </div>
+        <div class="col-md-2 b"></div>
+        <div class="col-md-2 b"></div>
+        <div class="col-md-6 b"></div>
+        <div class="col-md-1 b">
+            <i class="iconfont icon-duigouxiao"></i>
+            <i class="iconfont icon-lajitong"></i>
+        </div>
+    </div>
+     <div class="row d">
+         <div  class="col-md-1 b">
+        <input type="checkbox" name="checkbox">
+        </div>
+        <div class="col-md-2 b"></div>
+        <div class="col-md-2 b"></div>
+        <div class="col-md-6 b"></div>
+        <div class="col-md-1 b">
+            <i class="iconfont icon-duigouxiao"></i>
+            <i class="iconfont icon-lajitong"></i>
+        </div>
+    </div> -->
+    </div>
+<div class="modal" id="infoModal" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="backDiv">
+                    <i class="glyphicon glyphicon-menu-left"></i>
+                        <span>返回</span>
+                </div>
+                <div class="madal-title text-center">添加用户</div>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="">栏目名称</label>
+                        <input type="text" name="username" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">父栏目</label><br>
+                        <select class="ss">
+                            <option>1</option>
+                            <option>1</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">描述</label><br>
+                        <textarea class="te"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="reset" name="" class="hide">
+                    </div>
+                </form>
+            </div>
+              <div class="modal-footer">
+                 <span class="msg"></span>
+                <button class="btn btn-success btn-sm saveBtn">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+
+    .a{ 
+        height:30px; 
+        border: 1px solid gray;
+        margin-top: 20px;
+        }
+    .e{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .b{ 
+        height:30px; 
+        border: 1px solid gray;
+        
+        }
+    .d{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    /*}
+    .c{ 
+        height:30px; 
+        border: 1px solid gray;
+      
+        }
+    .f{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .t{ 
+        height:30px; 
+        border: 1px solid gray;
+       
+        }
+    .g{
+        margin-left: 10px;
+        margin-right: 10px;
+    }*/
+    #infoModal .backDiv{
+        float: left;
+        cursor: pointer;
+    }
+    #infoModal{
+        background-color: rgba(0,0,0,0.4);
+    }
+    #infoModal .modal-dialog{
+        margin-top: 0px;
+        margin-right: 0px;
+        width: 350px;
+    }
+    .ss{
+        width: 98%;
+        height: 35px;
+       /* border-radius: ci;*/
+    }
+    .te{
+        width: 98%;
+        height: 100px;
+    }
+</style>
+<script type="text/javascript">
+     $("#infoModal .modal-content").height($(window).height());
+    $(".addbtn").on({
+        click:function(){
+        $("#infoModal").show();
+        $("#infoModal input[type=reset]").trigger("click");
+        $(".msg").html("");
+        }
+    });
+     $(".addbtn").on({
+        click:function(){
+        $("#infoModal").show();
+        $("#infoModal input[type=reset]").trigger("click");
+        $(".msg").html("");
+        }
+    });
+      $(".dellbtn").on({
+        click:function(){
+        $("#infoModal input[type=]").trigger("click");
+        $(".msg").html("");
+        }
+    });
+    $(".backDiv").click(function(){
+        $("#infoModal").hide();
+    });
+     loadData()
+    function loadData(){
+          $.get(baseUrl+"/manager/category/findAllCategory",{},function(res){
+            console.log(res);
+             $(".wai").empty();
+            res.data.forEach(function(item,index){
+                var newtd=$(` 
+      <div class="row d">
+         <div class="col-md-1 b">
+        <input type="checkbox" name="checkbox">
+        </div>
+        <div class="col-md-2 b">`+(item.name?item.name:"..")+`</div>
+        <div class="col-md-2 b">`+(item.parent?item.parent.name:"..")+`</div>
+        <div class="col-md-6 b">`+(item.comment?item.comment:"..")+`</div>
+        <div class="col-md-1 b">
+            <i class="iconfont icon-duigouxiao" style="color:green"></i>
+            <i class="iconfont icon-lajitong" style="color:red"></i>
+        </div>
+    </div>`);
+     $(".wai").append(newtd)
+      // $("#user input[type=checkbox]:last").bootstrapSwitch("state",item.enabled);
+            });
+            
+
+          });
+    }
+</script>
